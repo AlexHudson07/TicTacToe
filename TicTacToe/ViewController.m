@@ -77,6 +77,15 @@
 
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
+    [self resetButtons];
+
+}
+- (IBAction)onRestartButtonPressed:(id)sender {
+
+    [self resetButtons];
+}
+
+-(void) resetButtons{
 
     self.labelOne.text = @"";
     self.labelTwo.text = @"";
@@ -87,7 +96,6 @@
     self.labelSeven.text = @"";
     self.labelEight.text = @"";
     self.labelNine.text = @"";
-
 }
 
 -(UILabel *) findLabelUsingPoint:(CGPoint)point{
@@ -206,6 +214,22 @@
         return @"O Won";
     }
 
+    if (![self.labelOne.text isEqual: @""] &&
+        ![self.labelTwo.text isEqual: @""] &&
+        ![self.labelThree.text isEqual: @""] &&
+        ![self.labelFour.text isEqual: @""] &&
+        ![self.labelFive.text isEqual: @""] &&
+        ![self.labelSix.text isEqual: @""] &&
+        ![self.labelSeven.text isEqual: @""] &&
+        ![self.labelEight.text isEqual: @""] &&
+        ![self.labelNine.text isEqual: @""]) {
+
+        UIAlertView *alertView = [[UIAlertView alloc]init];
+        alertView.delegate = self;
+        alertView.title = @"Cats Game";
+        [alertView addButtonWithTitle:@"Restart"];
+        [alertView show];
+    }
 
     return nil;
 }
