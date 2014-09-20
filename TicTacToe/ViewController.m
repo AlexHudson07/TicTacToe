@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UILabel *labelOne;
 @property (strong, nonatomic) IBOutlet UILabel *labelTwo;
 @property (strong, nonatomic) IBOutlet UILabel *labelThree;
@@ -22,7 +22,11 @@
 @property (strong, nonatomic) IBOutlet UILabel *oLabel;
 @property (strong, nonatomic) IBOutlet UILabel *xLabel;
 @property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *panGestureRecognizer;
-
+@property (strong, nonatomic) NSTimer * t;
+@property UIAlertView * timerAlertView;
+@property UIAlertView * whoWonAlertView;
+@property UIAlertView * startAlertView;
+@property NSRunLoop * runLoop;
 
 @property BOOL isItXsTurn;
 
@@ -34,61 +38,85 @@
     [super viewDidLoad];
     self.isItXsTurn = YES;
     self.whichPlayerLabel.text = @"X's Turn";
+    self.startAlertView = [[UIAlertView alloc]init];
+    self.startAlertView.delegate = self;
+    self.startAlertView.backgroundColor = [UIColor greenColor];
+    self.startAlertView.title = @"Each Player will have 10 seconds to make a move";
+    [self.startAlertView addButtonWithTitle:@"OK"];
+    [self.startAlertView show];
+
 }
 
-- (IBAction)onLabelTapped:(UITapGestureRecognizer *) tapGestureRecognizer{
+-(void) timerExpried{
 
-   CGPoint touchedPoint = [tapGestureRecognizer locationInView:self.view];
-    NSLog(@"%f and %f", touchedPoint.x, touchedPoint.y);
+    NSLog (@"Timer Expired");
 
-    if ([[self findLabelUsingPoint:touchedPoint].text isEqualToString:@""]) {
+    self.timerAlertView = [[UIAlertView alloc]init];
+    self.timerAlertView.delegate = self;
+    self.timerAlertView.title = @"You took to long, you lost your turn";
+    [self.timerAlertView addButtonWithTitle:@"OK"];
+    [self.timerAlertView show];
+    self.isItXsTurn = !self.isItXsTurn;
 
-        if (self.isItXsTurn) {
-            [self findLabelUsingPoint:touchedPoint].text = @"X";
-            [self findLabelUsingPoint:touchedPoint].textColor = [UIColor blueColor];
-
-
-            if ([self whoWon]) {
-
-                UIAlertView *alertView = [[UIAlertView alloc]init];
-                alertView.delegate = self;
-                alertView.title = [self whoWon];
-                [alertView addButtonWithTitle:@"Restart"];
-                [alertView show];
-            }
-
-            self.isItXsTurn = NO;
-            self.whichPlayerLabel.text = @"O's Turn";
-
-
-
-        }else{
-
-            [self findLabelUsingPoint:touchedPoint].text = @"O";
-            [self findLabelUsingPoint:touchedPoint].textColor = [UIColor redColor];
-
-            if ([self whoWon]) {
-
-                UIAlertView *alertView = [[UIAlertView alloc]init];
-                alertView.delegate = self;
-                alertView.title = [self whoWon];
-                [alertView addButtonWithTitle:@"Restart"];
-                [alertView show];
-            }
-            self.isItXsTurn = YES;
-            self.whichPlayerLabel.text = @"X's Turn";
-        }
+    if (self.isItXsTurn) {
+        self.whichPlayerLabel.text = @"X's Turn";
+    }else{
+        self.whichPlayerLabel.text = @"O's Turn";
     }
+
+}
+
+-(void)setTimer
+{
+    [self.t invalidate];
+    self.t = nil;
+
+    self.t = [NSTimer scheduledTimerWithTimeInterval: 10.0
+                                              target: self
+                                            selector:@selector(timerExpried)
+                                            userInfo: nil repeats:NO];
+
+    self.runLoop = [NSRunLoop currentRunLoop];
+    [self.runLoop addTimer: self.t forMode: NSDefaultRunLoopMode];
+
+    NSLog(@"Timer Reset");
+
 }
 
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    [self resetButtons];
+
+    if (alertView == self.startAlertView) {
+        [self setTimer];
+        NSLog(@"Initail timer set");
+    }
+
+    if (alertView == self.whoWonAlertView) {
+        [self resetButtons];
+        [self setTimer];
+    }
+
+    if (alertView == self.timerAlertView ) {
+        [self setTimer];
+        NSLog(@"You have 10 seconds");
+    }
 
 }
 - (IBAction)onRestartButtonPressed:(id)sender {
 
+    [self.t invalidate];
+    self.t = nil;
+
     [self resetButtons];
+
+    self.startAlertView = [[UIAlertView alloc]init];
+    self.startAlertView.delegate = self;
+    self.startAlertView.title = @"Remember you only have 10 seconds";
+    [self.startAlertView addButtonWithTitle:@"OK"];
+    [self.startAlertView show];
+
+
+
 }
 
 -(void) resetButtons{
@@ -239,6 +267,67 @@
 
     return nil;
 }
+#pragma mark - Tap Gesture Recognizer methods
+
+- (IBAction)onLabelTapped:(UITapGestureRecognizer *) tapGestureRecognizer{
+
+    CGPoint touchedPoint = [tapGestureRecognizer locationInView:self.view];
+    NSLog(@"%f and %f", touchedPoint.x, touchedPoint.y);
+
+    if ([[self findLabelUsingPoint:touchedPoint].text isEqualToString:@""]) {
+
+        if (self.isItXsTurn) {
+            [self findLabelUsingPoint:touchedPoint].text = @"X";
+            [self findLabelUsingPoint:touchedPoint].textColor = [UIColor blueColor];
+
+            if ([self whoWon]) {
+
+                UIAlertView *alertView = [[UIAlertView alloc]init];
+                alertView.delegate = self;
+                alertView.title = [self whoWon];
+                [alertView addButtonWithTitle:@"Restart"];
+                [alertView show];
+                [self.t invalidate];
+                self.t = nil;
+                // self.runLoop = nil;
+
+                NSLog(@"Timer Stopped");
+            } else{
+
+                [self setTimer];
+            }
+
+            self.isItXsTurn = NO;
+            self.whichPlayerLabel.text = @"O's Turn";
+
+        }else{
+
+            [self findLabelUsingPoint:touchedPoint].text = @"O";
+            [self findLabelUsingPoint:touchedPoint].textColor = [UIColor redColor];
+
+            if ([self whoWon]) {
+
+                UIAlertView *alertView = [[UIAlertView alloc]init];
+                alertView.delegate = self;
+                alertView.title = [self whoWon];
+                [alertView addButtonWithTitle:@"Restart"];
+                [alertView show];
+                [self.t invalidate];
+                self.t = nil;
+                // self.runLoop = nil;
+
+                NSLog(@"Timer Stopped");
+            }
+            else{
+
+                [self setTimer];
+            }
+            self.isItXsTurn = YES;
+            self.whichPlayerLabel.text = @"X's Turn";
+        }
+    }
+}
+
 
 #pragma mark - Pan Gesture Recognizer methods
 
@@ -247,9 +336,7 @@
     //getting the delta from where we started to where we are now and sets it to point
     CGPoint point = [panGestureRecognizer translationInView:self.view];
 
-    NSLog(@"point:x = %f point:y = %f", point.x, point.y);
-
-
+    //NSLog(@"point:x = %f point:y = %f", point.x, point.y);
 
     if (self.isItXsTurn) {
 
@@ -260,7 +347,7 @@
         point.x += self.xLabel.center.x;
         point.y += self.xLabel.center.y;
 
-        NSLog(@"point:x = %f point:y = %f", point.x, point.y);
+        //NSLog(@"point:x = %f point:y = %f", point.x, point.y);
 
         if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 
@@ -271,11 +358,20 @@
 
                 if ([self whoWon]) {
 
-                UIAlertView *alertView = [[UIAlertView alloc]init];
-                alertView.delegate = self;
-                alertView.title = [self whoWon];
-                [alertView addButtonWithTitle:@"Restart"];
-                [alertView show];
+                    self.whoWonAlertView = [[UIAlertView alloc]init];
+                    self.whoWonAlertView.delegate = self;
+                    self.whoWonAlertView.title = [self whoWon];
+                    [self.whoWonAlertView addButtonWithTitle:@"Restart"];
+                    [self.whoWonAlertView show];
+                    [self.t invalidate];
+                    self.t = nil;
+                   // self.runLoop = nil;
+
+                    NSLog(@"Timer Stopped");
+
+                }else{
+
+                    [self setTimer];
                 }
 
                 self.isItXsTurn = NO;
@@ -286,7 +382,6 @@
 
                 self.xLabel.transform = CGAffineTransformIdentity;
             }completion:nil];
-
 
         }
     } else{
@@ -299,7 +394,7 @@
         point.x += self.oLabel.center.x;
         point.y += self.oLabel.center.y;
 
-        NSLog(@"point:x = %f point:y = %f", point.x, point.y);
+        //NSLog(@"point:x = %f point:y = %f", point.x, point.y);
 
          if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 
@@ -309,29 +404,34 @@
                  [self findLabelUsingPoint:point].textColor = [UIColor redColor];
 
                  if ([self whoWon]) {
+                     self.whoWonAlertView = [[UIAlertView alloc]init];
+                     self.whoWonAlertView.delegate = self;
+                     self.whoWonAlertView.title = [self whoWon];
+                     [self.whoWonAlertView addButtonWithTitle:@"Restart"];
+                     [self.whoWonAlertView show];
+                     [self.t invalidate];
+                     self.t = nil;
+                     // self.runLoop = nil;
 
-                     UIAlertView *alertView = [[UIAlertView alloc]init];
-                     alertView.delegate = self;
-                     alertView.title = [self whoWon];
-                     [alertView addButtonWithTitle:@"Restart"];
-                     [alertView show];
+                     NSLog(@"Timer Stopped");
+                 }else{
+
+                     [self setTimer];
                  }
 
                  self.isItXsTurn = YES;
                  self.whichPlayerLabel.text = @"X's Turn";
-             }
 
+             }
 
              [UIView animateWithDuration:1.0f delay:0.0f options:0 animations:^{
 
                  self.oLabel.transform = CGAffineTransformIdentity;
              }completion:nil];
          }
-
     }
 
- //   NSLog(@"x = %f, y = %f", self.theFuture.center.x, self.theFuture.center.y);
-    NSLog (@"onDrag");
+    //NSLog (@"onDrag");
 }
 
 
