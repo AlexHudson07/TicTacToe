@@ -171,6 +171,7 @@
 				TargetAttributes = {
 					5DDEB32D19CB5CEA0095BEA8 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = KTXSHTJLS6;
 					};
 					5DDEB34919CB5CEA0095BEA8 = {
 						CreatedOnToolsVersion = 6.0;
@@ -416,6 +417,7 @@
 				5DDEB35619CB5CEA0095BEA8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5DDEB35719CB5CEA0095BEA8 /* Build configuration list for PBXNativeTarget "TicTacToeTests" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +426,7 @@
 				5DDEB35919CB5CEA0095BEA8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

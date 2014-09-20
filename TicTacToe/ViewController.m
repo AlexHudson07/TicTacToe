@@ -19,6 +19,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelEight;
 @property (strong, nonatomic) IBOutlet UILabel *labelNine;
 @property (strong, nonatomic) IBOutlet UILabel *whichPlayerLabel;
+@property (strong, nonatomic) IBOutlet UILabel *oLabel;
+@property (strong, nonatomic) IBOutlet UILabel *xLabel;
+@property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *panGestureRecognizer;
+
 
 @property BOOL isItXsTurn;
 
@@ -55,6 +59,8 @@
 
             self.isItXsTurn = NO;
             self.whichPlayerLabel.text = @"O's Turn";
+
+
 
         }else{
 
@@ -233,4 +239,100 @@
 
     return nil;
 }
+
+#pragma mark - Pan Gesture Recognizer methods
+
+- (IBAction)onDrag:(UIPanGestureRecognizer *)panGestureRecognizer {
+
+    //getting the delta from where we started to where we are now and sets it to point
+    CGPoint point = [panGestureRecognizer translationInView:self.view];
+
+    NSLog(@"point:x = %f point:y = %f", point.x, point.y);
+
+
+
+    if (self.isItXsTurn) {
+
+        //taking delta and making a transform and appliing it to the deltas transfrom
+        //transfrom means redrawing not moving the actual frame
+        self.xLabel.transform = CGAffineTransformMakeTranslation(point.x, point.y);
+
+        point.x += self.xLabel.center.x;
+        point.y += self.xLabel.center.y;
+
+        NSLog(@"point:x = %f point:y = %f", point.x, point.y);
+
+        if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+
+            if ([[self findLabelUsingPoint:point].text isEqualToString:@""]) {
+
+                [self findLabelUsingPoint:point].text = @"X";
+                [self findLabelUsingPoint:point].textColor = [UIColor blueColor];
+
+                if ([self whoWon]) {
+
+                UIAlertView *alertView = [[UIAlertView alloc]init];
+                alertView.delegate = self;
+                alertView.title = [self whoWon];
+                [alertView addButtonWithTitle:@"Restart"];
+                [alertView show];
+                }
+
+                self.isItXsTurn = NO;
+                self.whichPlayerLabel.text = @"O's Turn";
+            }
+
+            [UIView animateWithDuration:1.0f delay:0.0f options:0 animations:^{
+
+                self.xLabel.transform = CGAffineTransformIdentity;
+            }completion:nil];
+
+
+        }
+    } else{
+
+        //taking delta and making a transform and appliing it to the deltas transfrom
+        //transfrom means redrawing not moving the actual frame
+        self.oLabel.transform = CGAffineTransformMakeTranslation(point.x, point.y);
+
+
+        point.x += self.oLabel.center.x;
+        point.y += self.oLabel.center.y;
+
+        NSLog(@"point:x = %f point:y = %f", point.x, point.y);
+
+         if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+
+             if ([[self findLabelUsingPoint:point].text isEqualToString:@""]) {
+
+                 [self findLabelUsingPoint:point].text = @"O";
+                 [self findLabelUsingPoint:point].textColor = [UIColor redColor];
+
+                 if ([self whoWon]) {
+
+                     UIAlertView *alertView = [[UIAlertView alloc]init];
+                     alertView.delegate = self;
+                     alertView.title = [self whoWon];
+                     [alertView addButtonWithTitle:@"Restart"];
+                     [alertView show];
+                 }
+
+                 self.isItXsTurn = YES;
+                 self.whichPlayerLabel.text = @"X's Turn";
+             }
+
+
+             [UIView animateWithDuration:1.0f delay:0.0f options:0 animations:^{
+
+                 self.oLabel.transform = CGAffineTransformIdentity;
+             }completion:nil];
+         }
+
+    }
+
+ //   NSLog(@"x = %f, y = %f", self.theFuture.center.x, self.theFuture.center.y);
+    NSLog (@"onDrag");
+}
+
+
 @end

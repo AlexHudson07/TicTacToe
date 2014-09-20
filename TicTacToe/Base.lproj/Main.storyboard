@@ -94,11 +94,25 @@
                                     <action selector="onRestartButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="6Mt-bC-Uwa"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="X" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ahs-B2-RA2">
+                                <rect key="frame" x="54" y="439" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M97-Nr-Ygt">
+                                <rect key="frame" x="224" y="439" width="30" height="30"/>
+                                <gestureRecognizers/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="PLd-vE-zWR" appends="YES" id="2fd-Ga-fJ5"/>
+                            <outletCollection property="gestureRecognizers" destination="WUq-F8-iR3" appends="YES" id="j8p-9M-L40"/>
                         </connections>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -113,7 +127,10 @@
                         <outlet property="labelSix" destination="uUo-KG-SBh" id="lIF-mC-u6l"/>
                         <outlet property="labelThree" destination="aSt-BV-jRg" id="u83-To-Ctt"/>
                         <outlet property="labelTwo" destination="Xm7-Eb-a4Q" id="MEh-P4-ZiN"/>
+                        <outlet property="oLabel" destination="M97-Nr-Ygt" id="9Yh-Nb-dRK"/>
+                        <outlet property="panGestureRecognizer" destination="WUq-F8-iR3" id="lnd-Wv-gkx"/>
                         <outlet property="whichPlayerLabel" destination="9e2-lz-6Iw" id="OvE-Kh-0yr"/>
+                        <outlet property="xLabel" destination="ahs-B2-RA2" id="KbL-mQ-dJn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -122,6 +139,11 @@
                         <action selector="onLabelTapped:" destination="vXZ-lx-hvc" id="05U-Oe-Fn8"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="WUq-F8-iR3">
+                    <connections>
+                        <action selector="onDrag:" destination="vXZ-lx-hvc" id="HoD-EQ-cFS"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="275" y="58"/>
         </scene>
