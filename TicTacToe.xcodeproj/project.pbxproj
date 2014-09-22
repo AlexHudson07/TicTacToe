@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5DDE042E19CF988800DA3471 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DDE042D19CF988800DA3471 /* WebViewController.m */; };
 		5DDEB33419CB5CEA0095BEA8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEB33319CB5CEA0095BEA8 /* main.m */; };
 		5DDEB33719CB5CEA0095BEA8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEB33619CB5CEA0095BEA8 /* AppDelegate.m */; };
 		5DDEB33A19CB5CEA0095BEA8 /* TicTacToe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEB33819CB5CEA0095BEA8 /* TicTacToe.xcdatamodeld */; };
@@ -28,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5DDE042C19CF988800DA3471 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		5DDE042D19CF988800DA3471 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		5DDEB32E19CB5CEA0095BEA8 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DDEB33219CB5CEA0095BEA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5DDEB33319CB5CEA0095BEA8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -86,6 +89,8 @@
 				5DDEB33E19CB5CEA0095BEA8 /* Main.storyboard */,
 				5DDEB33B19CB5CEA0095BEA8 /* ViewController.h */,
 				5DDEB33C19CB5CEA0095BEA8 /* ViewController.m */,
+				5DDE042C19CF988800DA3471 /* WebViewController.h */,
+				5DDE042D19CF988800DA3471 /* WebViewController.m */,
 				5DDEB34119CB5CEA0095BEA8 /* Images.xcassets */,
 				5DDEB34319CB5CEA0095BEA8 /* LaunchScreen.xib */,
 				5DDEB33819CB5CEA0095BEA8 /* TicTacToe.xcdatamodeld */,
@@ -224,6 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DDEB33A19CB5CEA0095BEA8 /* TicTacToe.xcdatamodeld in Sources */,
+				5DDE042E19CF988800DA3471 /* WebViewController.m in Sources */,
 				5DDEB33719CB5CEA0095BEA8 /* AppDelegate.m in Sources */,
 				5DDEB33D19CB5CEA0095BEA8 /* ViewController.m in Sources */,
 				5DDEB33419CB5CEA0095BEA8 /* main.m in Sources */,

@@ -434,5 +434,20 @@
     //NSLog (@"onDrag");
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+
+    [self.t invalidate];
+    self.t = nil;
+
+}
+
+-(IBAction)unwindWebViewSegue:(UIStoryboardSegue *) segue{
+    self.startAlertView = [[UIAlertView alloc]init];
+    self.startAlertView.delegate = self;
+    self.startAlertView.title = @"Remember, will have 10 seconds to make a move";
+    [self.startAlertView addButtonWithTitle:@"OK"];
+    [self.startAlertView show];
+}
+
 
 @end
